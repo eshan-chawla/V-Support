@@ -1,0 +1,74 @@
+package com.example.uninstallchinese;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MainActivity extends AppCompatActivity {
+
+    ProgressBar progressBar;
+    TextView tv;
+    int ct=0;
+    ArrayList<ExampleItem> exampleList=new ArrayList<>();
+    ExampleItem exampleItem=new ExampleItem(R.drawable.aajtak,"whatsapp","helloworld");
+    ArrayList<String> all_app_names = new ArrayList<>(Arrays.asList("TikTok","Instagram","Shareit","Kwai","UC Browser","Baidu map","Shein","Clash of Kings","DU battery saver","DU battery saver","DU battery saver","DU battery saver","Helo","Likee","YouCam makeup","Mi Community","CM Browers","Virus Cleaner","APUS Browser","ROMWE","Club Factory","Newsdog","Newsdog","Beuty Plus","WeChat","UC News","QQ Mail","Weibo","Xender","QQ Music","QQ Newsfeed","Bigo Live","Bigo Live","selfieCity","Mail Master","Parallel Space","Parallel Space","Parallel Space","Parallel Space","Parallel Space","Parallel Space","Parallel Space","Parallel Space","Mi Video Call – Xiaomi","WeSync","ES File Explorer","Viva Video – QU Video Inc","Meitu","Vigo Video","New Video Status","DU Recorder","Vault- Hide","Cache Cleaner DU App studio","DU Cleaner","DU Browser","Hago Play With New Friends","Cam Scanner","Clean Master – Cheetah Mobile","Wonder Camera","Photo Wonder","QQ Player","We Meet","Sweet Selfie","Baidu","Vmate","QQ International","QQ Security Center","QQ Launcher","U Video","V fly Status Video","Mobile Legends","DU Privacy"));
+
+    int mImages[]={R.drawable.tiktok,R.drawable.tiktok,R.drawable.shareit,R.drawable.kwai,R.drawable.uc_browser,R.drawable.baidu_map,R.drawable.shein,R.drawable.clash_of_kings,R.drawable.du_battery_saver,R.drawable.du_battery_saver,R.drawable.du_battery_saver,R.drawable.du_battery_saver,R.drawable.helo,R.drawable.like,R.drawable.youcam_makeup,R.drawable.mi_community,R.drawable.cm_browser,R.drawable.virus_cleaner,R.drawable.apus_browser,R.drawable.romwe,R.drawable.club_factory,R.drawable.newsdog,R.drawable.newsdog,R.drawable.beauty_plus,R.drawable.we_chat,R.drawable.uc_news,R.drawable.qq_mail,R.drawable.weibo,R.drawable.xender,R.drawable.qq_music,R.drawable.qq_news_feed,R.drawable.bigo_live,R.drawable.bigo_live,R.drawable.selfie_city,R.drawable.mail_masster,R.drawable.parallel_space,R.drawable.parallel_space,R.drawable.parallel_space,R.drawable.parallel_space,R.drawable.parallel_space,R.drawable.parallel_space,R.drawable.parallel_space,R.drawable.parallel_space,R.drawable.mi_videocall,R.drawable.wesync,R.drawable.es_file_explorer,R.drawable.viva_video,R.drawable.meitu,R.drawable.vigo_video,R.drawable.new_video_status,R.drawable.du_recorder,R.drawable.vault_hide,R.drawable.cache_cleaner_du_app_studio,R.drawable.du_cleaner,R.drawable.du_browser,R.drawable.hago_play_with_new_friends,R.drawable.camscanner,R.drawable.clean_master,R.drawable.wonder_camera,R.drawable.photo_wonder,R.drawable.qq_player,R.drawable.we_meet_size_check,R.drawable.sweet_selfie,R.drawable.baidu,R.drawable.vmate,R.drawable.qq_international,R.drawable.qq_sequrity_centre,R.drawable.qq_launcher,R.drawable.u_video,R.drawable.vfly_status_video,R.drawable.mobile_legends,R.drawable.du_privacy};
+    ArrayList<String> packages = new ArrayList<>(Arrays.asList("com.whatsapp","for","Geeks"));
+    ArrayList<String> apps_found = new ArrayList<>();
+    ArrayList<String> apps_found_names = new ArrayList<>();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tv=findViewById(R.id.textView);
+        progressBar= findViewById(R.id.progressBar);
+        for (int i = 0; i <packages.size() ; i++) {
+            boolean isAppInstalled = appInstalledOrNot(packages.get(i));
+
+            if(isAppInstalled) {
+                //This intent will help you to launch if the package is already installed
+               /* apps_found.add(packages.get(i));
+                apps_found_names.add(all_app_names.get(i));*/
+
+            }
+            else{
+                exampleList.add(exampleItem);
+                //exampleList.add(new ExampleItem(mImages[i],all_app_names.get(i),packages.get(i)));
+                //exampleList.add(new ExampleItem(R.drawable.aajtak,"whatsapp","helloworld"));
+                ct++;
+            }
+
+        }
+        Toast.makeText(MainActivity.this,"All Apps scanned!",Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(MainActivity.this,"There are totally "+ct+" Chinese Apps",Toast.LENGTH_SHORT).show();
+        Intent intent =new Intent(getApplicationContext(),List_of_Chinese_Apps.class);
+       /* intent.putExtra("AppPackagesFound",apps_found);
+        intent.putExtra("AppNames",apps_found_names);*/
+       intent.putExtra("values",exampleList);
+        intent.putExtra("Count",ct);
+        startActivity(intent);
+
+
+    }
+    private boolean appInstalledOrNot(String uri) {
+        PackageManager pm = getPackageManager();
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+        return false;
+    }
+}
